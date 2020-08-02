@@ -1,4 +1,4 @@
-from Bio.Seq import Seq
+import random
 from src.data_operation import get_data
 
 # Paths
@@ -33,3 +33,19 @@ def get_overlapping_trigrams_of_sequence(amino_acids_sequence: str) -> list:
     for _ in range(len(amino_acids_sequence) - 2):
         trigrams.append(amino_acids_sequence[_:_ + 3])
     return trigrams
+
+
+def random_replace_ambiguous_acids(amino_acids_sequence: str) -> str:
+    """
+    Randomly selects replacements for all uncertain amino acids.
+    :param amino_acids_sequence: An amino acids sequence which contains uncertain amino acids.
+    :return: A certain amino acids sequence.
+    """
+    replacements = {'B': 'DN',
+                    'J': 'IL',
+                    'Z': 'EQ',
+                    'X': 'ACDEFGHIKLMNPQRSTVWY',
+                    '*': 'ACDEFGHIKLMNPQRSTVWY'}
+    for uncertain in replacements.keys():
+        amino_acids = amino_acids_sequence.replace(uncertain, random.choice(replacements[uncertain]))
+    return amino_acids
