@@ -3,11 +3,11 @@ import pandas as pd
 
 # Paths
 covid_metadata_path = "../../data/metadata.tsv"
-covid_sequences_path = "../../data/alignment.fasta"
+covid_dna_sequences_path = "../../data/alignment.fasta"
 covid_protvec_path = "../../data/protVec_100d_3grams.csv"
 
 
-def get_metadata(metadata_path: str):
+def get_metadata(metadata_path: str) -> pd.DataFrame:
     """
     Get the metadata for different strains
     :param metadata_path: The path of a metadata file.
@@ -17,7 +17,7 @@ def get_metadata(metadata_path: str):
     return metadata
 
 
-def get_sequences(sequences_path: str):
+def get_sequences(sequences_path: str) -> list:
     """
     Get a list of SeqRecords of a given fasta file.
     :param sequences_path: The path of a fasta file.
@@ -27,7 +27,7 @@ def get_sequences(sequences_path: str):
     return records
 
 
-def get_protvec(protvec_path: str):
+def get_protvec(protvec_path: str) -> pd.DataFrame:
     """
     Get protvec
     :param protvec_path: The path of a protvec file.

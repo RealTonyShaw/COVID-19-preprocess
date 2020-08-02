@@ -1,6 +1,7 @@
 from Bio.Seq import Seq
 from src.data_operation import get_data
 
+# Paths
 covid_amino_acids_path = "../../data/amino_acids.fasta"
 
 
@@ -13,8 +14,8 @@ def convert_dna_to_amino_acids(sequences_path: str, amino_acids_path: str):
     """
     full_records = get_data.get_sequences(sequences_path)
     f = open(amino_acids_path, 'w')
-    print(full_records[0].seq.translate())
     for record in full_records:
+        f.write(">")
         f.write(record.id)
         f.write('\n')
         f.write(str(record.seq.translate()))
@@ -22,7 +23,7 @@ def convert_dna_to_amino_acids(sequences_path: str, amino_acids_path: str):
     f.close()
 
 
-def get_overlapping_trigrams_of_sequence(amino_acids_sequence: str):
+def get_overlapping_trigrams_of_sequence(amino_acids_sequence: str) -> list:
     """
     Get the overlapping 3-grams according to the form proposed by Tempel.
     :param amino_acids_sequence: An amino acids sequence with length >= 3.
