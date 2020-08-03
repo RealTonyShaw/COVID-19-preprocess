@@ -1,5 +1,6 @@
 from Bio import SeqIO
 import pandas as pd
+from src.amino_acids.make_amino_acids_sequence import get_overlapping_trigrams_of_sequence
 
 # Paths
 covid_metadata_path = "../../data/metadata.tsv"
@@ -29,9 +30,27 @@ def get_sequences(sequences_path: str) -> list:
 
 def get_protvec(protvec_path: str) -> pd.DataFrame:
     """
-    Get protvec
-    :param protvec_path: The path of a protvec file.
-    :return: A dataframe object of protvec.
+    Get protVec
+    :param protvec_path: The path of a protVec file.
+    :return: A dataframe object of protVec.
     """
     protvec = pd.read_csv(protvec_path, "	")
     return protvec
+
+
+def convert_sequence_to_protvec(amino_acids_sequence: str, protvec_path: str) -> pd.DataFrame:
+    """
+    Embed a 3-grams sequence into the protVec.
+    :param amino_acids_sequence: A 3-grams sequence of amino acids.
+    :param protvec_path: The path of a protVec file.
+    :return: A dataframe object of the embedding protVec.
+    """
+    trigrams = get_overlapping_trigrams_of_sequence(amino_acids_sequence)
+    protvec = get_protvec(protvec_path)
+    embedded_trigrams = pd.DataFrame()
+    for trigram in trigrams:
+        if protvec[protvec['words'] == trigram].empty:
+            pd.concat([embedded_trigrams, protvec[protvec['words'] == '<unk>']])
+        else:
+            pd.concat([embedded_trigrams, protvec[protvec['words'] == trigram]])
+    return embedded_trigrams

@@ -18,7 +18,7 @@ def convert_dna_to_amino_acids(sequences_path: str, amino_acids_path: str):
         f.write(">")
         f.write(record.id)
         f.write('\n')
-        f.write(str(record.seq.translate()))
+        f.write(random_replace_ambiguous_acids(str(record.seq.translate())))
         f.write('\n')
     f.close()
 
@@ -46,6 +46,13 @@ def random_replace_ambiguous_acids(amino_acids_sequence: str) -> str:
                     'Z': 'EQ',
                     'X': 'ACDEFGHIKLMNPQRSTVWY',
                     '*': 'ACDEFGHIKLMNPQRSTVWY'}
+    certain_sequence = amino_acids_sequence
     for uncertain in replacements.keys():
-        amino_acids = amino_acids_sequence.replace(uncertain, random.choice(replacements[uncertain]))
-    return amino_acids
+        for _ in range(len(amino_acids_sequence)):
+            if amino_acids_sequence[_] in replacements.keys():
+                certain_sequence = certain_sequence[:_] + random.choice(replacements[amino_acids_sequence[_]]) + \
+                                   certain_sequence[_ + 1:]
+        # amino_acids_sequence.replace() would replace each uncertain amino acid to the same amino acid,
+        # which is implemented below.
+        # amino_acids_sequence = amino_acids_sequence.replace(uncertain, random.choice(replacements[uncertain]))
+    return certain_sequence
