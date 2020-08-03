@@ -50,7 +50,7 @@ def convert_sequence_to_protvec(amino_acids_sequence: str, protvec_path: str) ->
     embedded_trigrams = pd.DataFrame()
     for trigram in trigrams:
         if protvec[protvec['words'] == trigram].empty:
-            pd.concat([embedded_trigrams, protvec[protvec['words'] == '<unk>']])
+            embedded_trigrams = pd.concat([embedded_trigrams, protvec[protvec['words'] == '<unk>']])
         else:
-            pd.concat([embedded_trigrams, protvec[protvec['words'] == trigram]])
+            embedded_trigrams = pd.concat([embedded_trigrams, protvec[protvec['words'] == trigram]])
     return embedded_trigrams
