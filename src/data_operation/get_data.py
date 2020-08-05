@@ -64,12 +64,54 @@ def convert_sequence_to_protvec(amino_acids_sequence: str, protvec_path: str) ->
     return embedded_trigrams.iloc[:, 1:][:].sum()
 
 
+def convert_sequence_to_protvec_by_concat(amino_acids_sequence: str, protvec_path: str) -> pd.Series:
+    """
+    Embed a 3-grams sequence into the protVec by concat.
+    :param amino_acids_sequence: A 3-grams sequence of amino acids.
+    :param protvec_path: The path of a protVec file.
+    :return: A series object of the embedding protVec.
+    """
+    trigrams = get_overlapping_trigrams_of_sequence(amino_acids_sequence)
+    protvec = get_protvec(protvec_path)
+    embedded_trigrams = pd.Series()
+    for trigram in trigrams:
+        if protvec[protvec['words'] == trigram].empty:
+            embedded_trigrams = pd.concat([embedded_trigrams, protvec[protvec['words'] == '<unk>'].iloc[0]])
+        else:
+            embedded_trigrams = pd.concat([embedded_trigrams, protvec[protvec['words'] == trigram].iloc[0]])
+    print(embedded_trigrams)
+    return embedded_trigrams
+
+
 def embed_all_sequences(sequences_path: str, protvec_path: str) -> pd.DataFrame:
+    """
+    Embed all sequences into protVec.
+    :param sequences_path: The path of a fasta file.
+    :param protvec_path: The path of a protVec file.
+    :return: A dataframe object of the embedding sequences.
+    """
     sequences = get_sequences(sequences_path)
     # protvec = get_protvec(protvec_path)
     embedded_trigrams = pd.DataFrame()
     for sequence in sequences:
         embedded_trigrams = \
             pd.concat([embedded_trigrams, convert_sequence_to_protvec(sequence.seq, protvec_path).to_frame().T])
+        print(embedded_trigrams)
+    return embedded_trigrams
+
+
+def embed_all_sequences_by_concat(sequences_path: str, protvec_path: str) -> pd.DataFrame:
+    """
+    Embed all sequences into protVec by concat.
+    :param sequences_path: The path of a fasta file.
+    :param protvec_path: The path of a protVec file.
+    :return: A dataframe object of the embedding sequences.
+    """
+    sequences = get_sequences(sequences_path)
+    # protvec = get_protvec(protvec_path)
+    embedded_trigrams = pd.DataFrame()
+    for sequence in sequences:
+        embedded_trigrams = \
+            pd.concat([embedded_trigrams, convert_sequence_to_protvec_by_concat(sequence.seq, protvec_path).to_frame().T])
         print(embedded_trigrams)
     return embedded_trigrams
