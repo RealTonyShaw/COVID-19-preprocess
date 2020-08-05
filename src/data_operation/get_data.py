@@ -24,8 +24,8 @@ def get_sequences(sequences_path: str) -> list:
     :param sequences_path: The path of a fasta file.
     :return: A list of SeqRecords.
     """
-    records = list(SeqIO.parse(sequences_path, "fasta"))
-    return records
+    sequences = list(SeqIO.parse(sequences_path, "fasta"))
+    return sequences
 
 
 def get_protvec(protvec_path: str) -> pd.DataFrame:
@@ -63,6 +63,13 @@ def convert_sequence_to_protvec(amino_acids_sequence: str, protvec_path: str) ->
             embedded_trigrams = pd.concat([embedded_trigrams, protvec[protvec['words'] == trigram]])
     return embedded_trigrams.iloc[:, 1:][:].sum()
 
-"""
+
 def embed_all_sequences(sequences_path: str, protvec_path: str) -> pd.DataFrame:
-"""
+    sequences = get_sequences(sequences_path)
+    # protvec = get_protvec(protvec_path)
+    embedded_trigrams = pd.DataFrame()
+    for sequence in sequences:
+        embedded_trigrams = \
+            pd.concat([embedded_trigrams, convert_sequence_to_protvec(sequence.seq, protvec_path).to_frame().T])
+        print(embedded_trigrams)
+    return embedded_trigrams

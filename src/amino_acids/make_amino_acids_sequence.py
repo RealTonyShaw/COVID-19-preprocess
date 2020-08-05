@@ -5,11 +5,13 @@ from src.data_operation import get_data
 covid_amino_acids_path = "../../data/amino_acids.fasta"
 
 
-def convert_dna_to_amino_acids(sequences_path: str, amino_acids_path: str):
+def convert_dna_to_amino_acids(sequences_path: str, amino_acids_path: str, start_point: int, end_point: int):
     """
     Convert original DNA fasta file to amino acids fasta file.
     :param amino_acids_path: The path of amino acids fasta file to be generated.
     :param sequences_path: The path of a DNA fasta file.
+    :param start_point: Indicate the start point of subsequence.
+    :param end_point: Indicate the end point of subsequence.
     :return:
     """
     full_records = get_data.get_sequences(sequences_path)
@@ -18,7 +20,7 @@ def convert_dna_to_amino_acids(sequences_path: str, amino_acids_path: str):
         f.write(">")
         f.write(record.id)
         f.write('\n')
-        f.write(random_replace_ambiguous_acids(str(record.seq.translate())))
+        f.write(random_replace_ambiguous_acids(str(record.seq[start_point:end_point].translate()))[0:-1])
         f.write('\n')
     f.close()
 
@@ -44,8 +46,8 @@ def random_replace_ambiguous_acids(amino_acids_sequence: str) -> str:
     replacements = {'B': 'DN',
                     'J': 'IL',
                     'Z': 'EQ',
-                    'X': 'ACDEFGHIKLMNPQRSTVWY',
-                    '*': 'ACDEFGHIKLMNPQRSTVWY'}
+                    'X': 'ACDEFGHIKLMNPQRSTVWY'}
+    # '*': 'ACDEFGHIKLMNPQRSTVWY'} '*' is the stop symbol.
     certain_sequence = amino_acids_sequence
     for uncertain in replacements.keys():
         for _ in range(len(amino_acids_sequence)):
