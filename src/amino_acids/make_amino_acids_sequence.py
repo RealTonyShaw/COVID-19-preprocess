@@ -1,5 +1,6 @@
 import random
 from src.data_operation import get_data
+from Bio import SeqIO
 
 # Paths
 covid_amino_acids_path = "../../data/amino_acids.fasta"
@@ -58,3 +59,16 @@ def random_replace_ambiguous_acids(amino_acids_sequence: str) -> str:
         # which is implemented below.
         # amino_acids_sequence = amino_acids_sequence.replace(uncertain, random.choice(replacements[uncertain]))
     return certain_sequence
+
+
+def get_date(sequence_record: SeqIO.SeqRecord, metadata_path: str) -> int:
+    """
+    Get the collected month of a given virus sequence.
+    :param sequence_record: A sequence record.
+    :param metadata_path: The path of a metadata file.
+    :return: Month.
+    """
+    metadata = get_data.get_metadata(metadata_path)
+    date = metadata[metadata['strain'] == str(sequence_record.id)].iloc[0, 2]
+    date_month = date.split("-")
+    return int(date_month[1])
