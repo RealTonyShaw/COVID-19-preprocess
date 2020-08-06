@@ -79,7 +79,6 @@ def convert_sequence_to_protvec_by_concat(amino_acids_sequence: str, protvec_pat
             embedded_trigrams = pd.concat([embedded_trigrams, protvec[protvec['words'] == '<unk>'].iloc[0]])
         else:
             embedded_trigrams = pd.concat([embedded_trigrams, protvec[protvec['words'] == trigram].iloc[0]])
-    print(embedded_trigrams)
     return embedded_trigrams
 
 
@@ -94,8 +93,9 @@ def embed_all_sequences(sequences_path: str, protvec_path: str) -> pd.DataFrame:
     # protvec = get_protvec(protvec_path)
     embedded_trigrams = pd.DataFrame()
     for sequence in sequences:
+        # TODO: Fix concat bugs
         embedded_trigrams = \
-            pd.concat([embedded_trigrams, convert_sequence_to_protvec(sequence.seq, protvec_path).to_frame().T])
+            pd.concat([embedded_trigrams, convert_sequence_to_protvec(sequence.seq, protvec_path).to_frame().T.iloc[:, 1:]])
         print(embedded_trigrams)
     return embedded_trigrams
 
@@ -110,8 +110,14 @@ def embed_all_sequences_by_concat(sequences_path: str, protvec_path: str) -> pd.
     sequences = get_sequences(sequences_path)
     # protvec = get_protvec(protvec_path)
     embedded_trigrams = pd.DataFrame()
+    # TODO: Delete _, it's only for test purpose.
+    _ = 0
     for sequence in sequences:
+        _ += 1
+        if _ == 10:
+            break
+        # TODO: Fix concat bugs
         embedded_trigrams = \
-            pd.concat([embedded_trigrams, convert_sequence_to_protvec_by_concat(sequence.seq, protvec_path).to_frame().T])
+        pd.concat([embedded_trigrams, convert_sequence_to_protvec_by_concat(sequence.seq, protvec_path).to_frame().T.iloc[:, 1:]])
         print(embedded_trigrams)
     return embedded_trigrams

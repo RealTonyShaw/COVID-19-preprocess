@@ -18,11 +18,13 @@ def convert_dna_to_amino_acids(sequences_path: str, amino_acids_path: str, start
     full_records = get_data.get_sequences(sequences_path)
     f = open(amino_acids_path, 'w')
     for record in full_records:
-        f.write(">")
-        f.write(record.id)
-        f.write('\n')
-        f.write(random_replace_ambiguous_acids(str(record.seq[start_point:end_point].translate()))[0:-1])
-        f.write('\n')
+        # TODO: Let date be a param.
+        if get_date(record, get_data.covid_metadata_path) == 2:
+            f.write(">")
+            f.write(record.id)
+            f.write('\n')
+            f.write(random_replace_ambiguous_acids(str(record.seq[start_point:end_point].translate()))[0:-1])
+            f.write('\n')
     f.close()
 
 
@@ -69,6 +71,13 @@ def get_date(sequence_record: SeqIO.SeqRecord, metadata_path: str) -> int:
     :return: Month.
     """
     metadata = get_data.get_metadata(metadata_path)
-    date = metadata[metadata['strain'] == str(sequence_record.id)].iloc[0, 2]
+    # TODO: Specify except: Date may not exist in metadata.
+    try:
+        date = metadata[metadata['strain'] == str(sequence_record.id)].iloc[0, 2]
+    except:
+        return 0
     date_month = date.split("-")
+    # Test if the month data is not accurate.
+    if date_month[1] == "XX":
+        return 0
     return int(date_month[1])
