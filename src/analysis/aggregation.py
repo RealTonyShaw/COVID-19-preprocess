@@ -8,7 +8,7 @@ covid_overlapping_trigrams_path = "../../data/overlapping.csv"
 def save_trigrams(amino_acids_sequence: str, protvec_path: str, file_path: str):
     # gd.embed_all_sequences_by_concat(ma.covid_amino_acids_path, gd.covid_protvec_path)
     embedded_trigrams = gd.embed_all_sequences_by_concat(amino_acids_sequence, protvec_path)
-    embedded_trigrams.to_csv(file_path)
+    embedded_trigrams.to_csv(file_path, index=False)
 
 
 def kmeans_of_trigrams_sequences(file_path: str):
@@ -18,4 +18,5 @@ def kmeans_of_trigrams_sequences(file_path: str):
     print(centroids)
 
 
+# save_trigrams(ma.covid_amino_acids_path, gd.covid_protvec_path, covid_overlapping_trigrams_path)
 kmeans_of_trigrams_sequences(covid_overlapping_trigrams_path)

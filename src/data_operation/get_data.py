@@ -61,7 +61,7 @@ def convert_sequence_to_protvec(amino_acids_sequence: str, protvec_path: str) ->
             # else:
             #     embedded_trigrams = embedded_trigrams + protvec[protvec['words'] == trigram].iloc[:, 1:]
             embedded_trigrams = pd.concat([embedded_trigrams, protvec[protvec['words'] == trigram]])
-    return embedded_trigrams.iloc[:, 1:][:].sum()
+    return embedded_trigrams.iloc[:, 1:][:].sum().drop("words")
 
 
 def convert_sequence_to_protvec_by_concat(amino_acids_sequence: str, protvec_path: str) -> pd.Series:
@@ -79,7 +79,7 @@ def convert_sequence_to_protvec_by_concat(amino_acids_sequence: str, protvec_pat
             embedded_trigrams = pd.concat([embedded_trigrams, protvec[protvec['words'] == '<unk>'].iloc[0]])
         else:
             embedded_trigrams = pd.concat([embedded_trigrams, protvec[protvec['words'] == trigram].iloc[0]])
-    return embedded_trigrams
+    return embedded_trigrams.drop("words")
 
 
 def embed_all_sequences(sequences_path: str, protvec_path: str) -> pd.DataFrame:
@@ -95,7 +95,8 @@ def embed_all_sequences(sequences_path: str, protvec_path: str) -> pd.DataFrame:
     for sequence in sequences:
         # TODO: Fix concat bugs
         embedded_trigrams = \
-            pd.concat([embedded_trigrams, convert_sequence_to_protvec(sequence.seq, protvec_path).to_frame().T.iloc[:, 1:]])
+            pd.concat([embedded_trigrams, convert_sequence_to_protvec(sequence.seq, protvec_path).to_frame().T])
+            # pd.concat([embedded_trigrams, convert_sequence_to_protvec(sequence.seq, protvec_path).to_frame().T.iloc[:, 1:]])
         print(embedded_trigrams)
     return embedded_trigrams
 
@@ -118,6 +119,8 @@ def embed_all_sequences_by_concat(sequences_path: str, protvec_path: str) -> pd.
             break
         # TODO: Fix concat bugs
         embedded_trigrams = \
-        pd.concat([embedded_trigrams, convert_sequence_to_protvec_by_concat(sequence.seq, protvec_path).to_frame().T.iloc[:, 1:]])
+            pd.concat([embedded_trigrams,
+                       convert_sequence_to_protvec_by_concat(sequence.seq, protvec_path).to_frame().T])
+        # pd.concat([embedded_trigrams, convert_sequence_to_protvec_by_concat(sequence.seq, protvec_path).to_frame().T.iloc[:, 1:]])
         print(embedded_trigrams)
     return embedded_trigrams
