@@ -2,11 +2,6 @@ from Bio import SeqIO
 import pandas as pd
 from src.amino_acids.make_amino_acids_sequence import get_overlapping_trigrams_of_sequence
 
-# Paths
-covid_metadata_path = "../../data/metadata.tsv"
-covid_dna_sequences_path = "../../data/alignment.fasta"
-covid_protvec_path = "../../data/protVec_100d_3grams.csv"
-
 
 def get_metadata(metadata_path: str) -> pd.DataFrame:
     """

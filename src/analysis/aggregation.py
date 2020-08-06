@@ -4,8 +4,6 @@ import src.amino_acids.make_amino_acids_sequence as ma
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
-covid_overlapping_trigrams_path = "../../data/overlapping.csv"
-
 
 def save_trigrams(amino_acids_sequence: str, protvec_path: str, file_path: str):
     """

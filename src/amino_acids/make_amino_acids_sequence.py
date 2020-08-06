@@ -2,9 +2,6 @@ import random
 from src.data_operation import get_data
 from Bio import SeqIO
 
-# Paths
-covid_amino_acids_path = "../../data/amino_acids.fasta"
-
 
 def convert_dna_to_amino_acids(sequences_path: str, amino_acids_path: str, start_point: int, end_point: int):
     """

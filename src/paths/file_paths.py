@@ -1,0 +1,5 @@
+covid_amino_acids_path = "../../data/amino_acids.fasta"
+covid_metadata_path = "../../data/metadata.tsv"
+covid_dna_sequences_path = "../../data/alignment.fasta"
+covid_protvec_path = "../../data/protVec_100d_3grams.csv"
+covid_overlapping_trigrams_path = "../../data/overlapping.csv"
