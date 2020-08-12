@@ -35,3 +35,17 @@ def kmeans_of_trigrams_sequences(file_path: str):
     plt.xlabel("Number of cluster")
     plt.ylabel("SSE")
     plt.show()
+
+
+def aggregate_sequences(file_path: str, aggregation_num: int):
+    """
+    Print kmeans centers
+    :param file_path: Path of materialized embedded sequences.
+    :param aggregation_num: The number of aggregations.
+    :return:
+    """
+    covid_seq = pd.read_csv(file_path)
+    kmeans = KMeans(n_clusters=aggregation_num, max_iter=1000).fit(covid_seq)
+    print(kmeans.cluster_centers_)
+
+
