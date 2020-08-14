@@ -4,7 +4,7 @@ Preprocess COVID-19 strains data by the algorithm proposed by *[Tempel](https://
 
 # Data Files
 
-`src.paths.file_paths` stores paths to the data which were not uploaded due to the file size limitation of GitHub. The files missing are listed below:
+`src.paths.file_paths` stores paths to the data which were not uploaded due to the file size limitation of GitHub. Missing data files are listed below:
 * `covid_amino_acids_path` contains virus types and their corresponding amino acids sequence.
 * `covid_metadata_path` contains virus types and their corresponding discovery time.
 * `covid_dna_sequences_path` contains virus types and their corresponding DNA sequence.
